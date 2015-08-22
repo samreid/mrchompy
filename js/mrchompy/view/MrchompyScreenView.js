@@ -11,6 +11,9 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var MonsterNode = require( 'MRCHOMPY/mrchompy/view/MonsterNode' );
+  var Bounds2 = require( 'DOT/Bounds2' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param {MrchompyModel} mrchompyModel
@@ -20,15 +23,14 @@ define( function( require ) {
 
     ScreenView.call( this );
 
-    // Reset All button
-    var resetAllButton = new ResetAllButton( {
-      listener: function() {
-        mrchompyModel.reset();
-      },
-      right: this.layoutBounds.maxX - 10,
-      bottom: this.layoutBounds.maxY - 10
-    } );
-    this.addChild( resetAllButton );
+    var rays = [ { tail: new Vector2( 0, 0 ), tip: new Vector2( 100, 100 ) } ];
+    var monsterNode = new MonsterNode( this.layoutBounds.width, this.layoutBounds.height, rays );
+    this.addChild( monsterNode );
+
+    this.events.on( 'layoutFinished', function( dx, dy, width, height ) {
+        monsterNode.setCanvasBounds( new Bounds2( -dx, -dy, width - dx, height - dy ) );
+      }
+    );
   }
 
   return inherit( ScreenView, MrchompyScreenView, {
