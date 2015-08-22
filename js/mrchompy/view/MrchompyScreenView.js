@@ -209,14 +209,15 @@ define( function( require ) {
 
     this.step = function( dt ) {
 
+      var force = 0.02;
       if ( pressedKeys[ 39 ] ) {
 
         // right
         console.log( 'right' );
-        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: 0.03, y: 0 } );
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x:force, y: 0 } );
       }
       if ( pressedKeys[ 37 ] ) {
-        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: -0.03, y: 0 } );
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: -force, y: 0 } );
       }
       if ( pressedKeys[ 38 ] && mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.y > 300 ) {
         for ( var i = 0; i < mrchompyScreenView.elements[ 0 ].bodies.length; i++ ) {
