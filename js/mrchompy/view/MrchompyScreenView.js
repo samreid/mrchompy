@@ -269,6 +269,15 @@ define( function( require ) {
     );
 
     this.step = function( dt ) {
+      if ( pressedKeys[ 39 ] ) {
+
+        // right
+        console.log( 'right' );
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: 0.03, y: 0 } );
+      }
+      if ( pressedKeys[ 37 ] ) {
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: -0.03, y: 0 } );
+      }
       triangles.length = 0;
       for ( var i = 0; i < mrchompyScreenView.elements.length; i++ ) {
         var element = mrchompyScreenView.elements[ i ];
@@ -301,10 +310,19 @@ define( function( require ) {
       }
     }
 
+    var pressedKeys = {};
     addEvent( document, "keydown", function( e ) {
       var e = e || window.event;
       // use e.keyCode
       console.log( e.keyCode );
+      pressedKeys[ e.keyCode ] = true;
+    } );
+
+    addEvent( document, "keyup", function( e ) {
+      var e = e || window.event;
+      // use e.keyCode
+      console.log( e.keyCode );
+      pressedKeys[ e.keyCode ] = false;
     } );
 
     this.addChild( new Image( title, {
