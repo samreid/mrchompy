@@ -283,6 +283,27 @@ define( function( require ) {
       }
       monsterNode.invalidatePaint();
     };
+
+
+    // Key listeners 
+    // http://stackoverflow.com/questions/16089421/simplest-way-to-detect-keypresses-in-javascript
+    function addEvent( element, eventName, callback ) {
+      if ( element.addEventListener ) {
+        element.addEventListener( eventName, callback, false );
+      }
+      else if ( element.attachEvent ) {
+        element.attachEvent( "on" + eventName, callback );
+      }
+      else {
+        element[ "on" + eventName ] = callback;
+      }
+    }
+
+    addEvent( document, "keydown", function( e ) {
+      var e = e || window.event;
+      // use e.keyCode
+      console.log( e.keyCode );
+    } );
   }
 
   return inherit( ScreenView, MrchompyScreenView, {} );
