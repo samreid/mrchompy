@@ -130,21 +130,36 @@ define( function( require ) {
 
       var groupId = Body.nextGroupId();
 
-      var ropeA = Composites.stack( 200, 100, 5, 2, 10, 10, function( x, y, column, row ) {
+      var ropeA = Composites.stack( 600, 0, 5, 2, 10, 10, function( x, y, column, row ) {
         return Bodies.rectangle( x, y, 50, 20, { groupId: groupId } );
       } );
 
       Composites.chain( ropeA, 0.5, 0, -0.5, 0, { stiffness: 0.8, length: 2 } );
       Composite.add( ropeA, Constraint.create( {
-        bodyB: ropeA.bodies[ 0 ],
-        pointB: { x: -25, y: 0 },
-        pointA: { x: 200, y: 100 },
-        stiffness: 0.5
+        bodyA: elements[ 0 ].bodies[ 0 ],
+        bodyB: ropeA.bodies[ ropeA.bodies.length - 1 ],
+        stiffness: 1
+      } ) );
+      World.add( _world, ropeA );
+      elements = elements.concat( ropeA );
+
+      groupId = Body.nextGroupId();
+
+      var ropeB = Composites.stack( 1000, 0, 5, 2, 10, 10, function( x, y, column, row ) {
+        return Bodies.rectangle( x, y, 50, 20, { groupId: groupId } );
+      } );
+
+      Composites.chain( ropeB, 0.5, 0, -0.5, 0, { stiffness: 0.8, length: 2 } );
+      Composite.add( ropeB, Constraint.create( {
+        bodyA: elements[ 0 ].bodies[ 5 ],
+        bodyB: ropeB.bodies[ 0 ],
+        stiffness: 1
       } ) );
 
-      World.add( _world, ropeA );
+      World.add( _world, ropeB );
 
-      elements = elements.concat( ropeA );
+      elements = elements.concat( ropeB );
+
       mrchompyScreenView.elements = elements;
     };
 
@@ -251,17 +266,25 @@ define( function( require ) {
 
         // right
         console.log( 'right' );
-        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: force, y: 0 } );
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 30 ], { x: 0, y: 0 }, { x: force / 2, y: 0 } );
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 35 ], { x: 0, y: 0 }, { x: force / 2, y: 0 } );
       }
       if ( pressedKeys[ 37 ] ) {
-        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: -force, y: 0 } );
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 30 ], { x: 0, y: 0 }, {
+          x: -force / 2,
+          y: 0
+        } );
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 35 ], { x: 0, y: 0 }, {
+          x: -force / 2,
+          y: 0
+        } );
       }
       if ( pressedKeys[ 38 ] && _engine.pairs.collisionActive.length > 35 ) {
         for ( var i = 0; i < mrchompyScreenView.elements[ 0 ].bodies.length; i++ ) {
           var b = mrchompyScreenView.elements[ 0 ].bodies[ i ];
           Matter.Body.applyForce( b, { x: 0, y: 0 }, {
             x: 0,
-            y: -2 / mrchompyScreenView.elements[ 0 ].bodies.length
+            y: -0.2 / mrchompyScreenView.elements[ 0 ].bodies.length
           } );
         }
       }
@@ -271,12 +294,13 @@ define( function( require ) {
         if ( element.bodies ) {
           for ( var k = 0; k < element.bodies.length; k++ ) {
             var body = element.bodies[ k ];
+            console.log( 'v', body.vertices.length );
 
             triangles.push( {
               x1: body.position.x, y1: body.position.y,
               x2: body.position.x + 35, y2: body.position.y,
               x3: body.position.x, y3: body.position.y + 35,
-              r: 0.1, g: 0.1, b: 0.1, a: 1
+              r: k === 35 ? 1 : 0.1, g: 0.1, b: 0.1, a: 1
             } );
           }
         }
