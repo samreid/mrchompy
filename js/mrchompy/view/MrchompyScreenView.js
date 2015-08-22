@@ -269,6 +269,7 @@ define( function( require ) {
     );
 
     this.step = function( dt ) {
+
       if ( pressedKeys[ 39 ] ) {
 
         // right
@@ -277,6 +278,15 @@ define( function( require ) {
       }
       if ( pressedKeys[ 37 ] ) {
         Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: -0.03, y: 0 } );
+      }
+      if ( pressedKeys[ 38 ] && mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.y > 300 ) {
+        for ( var i = 0; i < mrchompyScreenView.elements[ 0 ].bodies.length; i++ ) {
+          var b = mrchompyScreenView.elements[ 0 ].bodies[ i ];
+          Matter.Body.applyForce( b, { x: 0, y: 0 }, {
+            x: 0,
+            y: -0.13 / mrchompyScreenView.elements[ 0 ].bodies.length
+          } );
+        }
       }
       triangles.length = 0;
       for ( var i = 0; i < mrchompyScreenView.elements.length; i++ ) {
