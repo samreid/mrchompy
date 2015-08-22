@@ -71,7 +71,8 @@ define( function( require ) {
         positionIterations: 6,
         velocityIterations: 4,
         enableSleeping: false,
-        metrics: { extended: true }
+        metrics: { extended: true },
+        render: {}
       };
 
       // create a Matter engine
@@ -113,21 +114,18 @@ define( function( require ) {
 
       var particleOptions = {
         friction: 0.05,
-        frictionStatic: 0.1,
-        render: { visible: true }
+        frictionStatic: 0.1
       };
 
       var elements = [
         //xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions
-        Composites.softBody( 250, 100, 10, 10, 0, 0, true, 10, particleOptions ),
+        Composites.softBody( 250, 100, 6, 6, 0, 0, true, 10, particleOptions ),
         //Composites.softBody( 250, 300, 8, 3, 0, 0, true, 15, particleOptions ),
         //Composites.softBody( 250, 400, 4, 4, 0, 0, true, 15, particleOptions )
       ];
       World.add( _world, elements );
 
       mrchompyScreenView.elements = elements;
-      var renderOptions = _engine.render.options;
-      renderOptions.showAngleIndicator = false;
     };
 
     Demo.reset = function() {
