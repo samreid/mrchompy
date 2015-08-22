@@ -23,6 +23,8 @@ define( function( require ) {
     Node.call( this );
 
     var t = Date.now();
+    //var t = 1000;
+
     var maxAlpha1 = Math.PI / 5;
     var minAlpha1 = 0;
     var maxAlpha2 = Math.PI / 8;
@@ -52,7 +54,10 @@ define( function( require ) {
     var shape = new Shape();
     shape.moveTo( 0, 0 );
     shape.lineTo( jawPoint1X, jawPoint1Y );
-    shape.lineTo( -100, 0 );
+    shape.lineTo( -100, 200 );
+    shape.lineTo( -200, 0 );
+    shape.lineTo( -200, -200 );
+    shape.lineTo( -100, -300 );
     shape.lineTo( jawPoint2X, jawPoint2Y );
     shape.close();
 
@@ -74,6 +79,23 @@ define( function( require ) {
       tooth1.close();
       monsterNode.addChild( new Path( tooth1, { fill: 'white', stroke: 'gray', lineWidth: 2 } ) );
     };
+
+    var addUpperTooth = function( distanceFromFrontOfJawToTooth, toothBaseLength, toothHeight, toothAngle ) {
+      var tooth = new Shape();
+      var toothPoint1x = (j2 - distanceFromFrontOfJawToTooth) * Math.cos( alpha2 );
+      var toothPoint1y = -(j2 - distanceFromFrontOfJawToTooth) * Math.sin( alpha2 );
+      tooth.moveTo( toothPoint1x, toothPoint1y );
+      tooth.lineTo(
+        toothPoint1x - toothHeight * Math.cos( alpha2 + toothAngle ),
+        toothPoint1y + toothHeight * Math.sin( alpha2 + toothAngle )
+      );
+      var toothPoint2x = (j2 - distanceFromFrontOfJawToTooth - toothBaseLength) * Math.cos( alpha2 );
+      var toothPoint2y = -(j2 - distanceFromFrontOfJawToTooth - toothBaseLength) * Math.sin( alpha2 );
+      tooth.lineTo( toothPoint2x, toothPoint2y );
+      tooth.close();
+      monsterNode.addChild( new Path( tooth, { fill: 'white', stroke: 'gray', lineWidth: 2 } ) );
+    };
+
     addLowerTooth( 0, 30, 80, toRadians( 60 ) );
     addLowerTooth( 25, 30, 70, toRadians( 70 ) );
     addLowerTooth( 38, 30, 70, toRadians( 65 ) );
@@ -82,9 +104,17 @@ define( function( require ) {
     addLowerTooth( 80, 30, 60, toRadians( 60 ) );
     addLowerTooth( 100, 30, 70, toRadians( 60 ) );
     addLowerTooth( 140, 30, 70, toRadians( 70 ) );
+
+    addUpperTooth( 0, 30, 120, toRadians( 70 ) );
+    addUpperTooth( 20, 30, 120, toRadians( 70 ) );
+
     this.addChild( new Path( shape, { fill: 'green', stroke: 'gray' } ) );
 
-
+    this.addChild( new Path( new Shape().moveTo( 0, -100 ).
+        lineToRelative( 20, -50 ).
+        lineToRelative( 40, 40 ).
+        close(), { fill: 'white', stroke: 'black', lineWidth: 2 }
+    ) );
   }
 
   return inherit( Node, MonsterNode );
