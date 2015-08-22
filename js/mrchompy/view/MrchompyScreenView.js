@@ -14,6 +14,8 @@ define( function( require ) {
   var MonsterNode = require( 'MRCHOMPY/mrchompy/view/MonsterNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Vector2 = require( 'DOT/Vector2' );
+  var title = require( 'image!MRCHOMPY/mrchompy.png' );
+  var Image = require( 'SCENERY/nodes/Image' );
 
   /**
    * @param {MrchompyModel} mrchompyModel
@@ -304,6 +306,11 @@ define( function( require ) {
       // use e.keyCode
       console.log( e.keyCode );
     } );
+
+    this.addChild( new Image( title, {
+      centerX: this.layoutBounds.centerX,
+      top: 100
+    } ) );
   }
 
   return inherit( ScreenView, MrchompyScreenView, {} );
