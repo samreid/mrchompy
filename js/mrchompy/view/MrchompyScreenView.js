@@ -121,7 +121,8 @@ define( function( require ) {
         //xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions
         Composites.softBody( 800, 0, 6, 6, 0, 0, true, 10, particleOptions ),
         //Composites.softBody( 250, 300, 8, 3, 0, 0, true, 15, particleOptions ),
-        //Composites.softBody( 250, 400, 4, 4, 0, 0, true, 15, particleOptions )
+        //Composites.softBody( 250, 400, 4, 4, 0, 0, true, 15, particleOptions ),
+        Bodies.rectangle( 200, 100, 100, 100 )
       ];
       World.add( _world, elements );
 
@@ -207,59 +208,83 @@ define( function( require ) {
       }
     );
 
+    var addRectangle = function( x, y, width, height, r, g, b, a ) {
+      triangles.push( { x1: x, y1: y, x2: x + width, y2: y, x3: x + width, y3: y + height, r: r, g: g, b: b, a: a } );
+      triangles.push( {
+        x1: x,
+        y1: y,
+        x2: x,
+        y2: y + height,
+        x3: x + width,
+        y3: y + height,
+        r: r,
+        g: g,
+        b: b,
+        a: a
+      } );
+    };
+
+    var timeSinceJump = 1000000;
     this.step = function( dt ) {
 
-      var force = 0.02;
+      console.log(_engine.pairs.collisionActive.length);
+      var force = 0.01;
       if ( pressedKeys[ 39 ] ) {
 
         // right
         console.log( 'right' );
-        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x:force, y: 0 } );
+        Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: force, y: 0 } );
       }
       if ( pressedKeys[ 37 ] ) {
         Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: -force, y: 0 } );
       }
-      if ( pressedKeys[ 38 ] && mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.y > 300 ) {
+      if ( pressedKeys[ 38 ] && mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.y > 300 && _engine.pairs.collisionActive.length > 35 ) {
         for ( var i = 0; i < mrchompyScreenView.elements[ 0 ].bodies.length; i++ ) {
           var b = mrchompyScreenView.elements[ 0 ].bodies[ i ];
           Matter.Body.applyForce( b, { x: 0, y: 0 }, {
             x: 0,
-            y: -0.13 / mrchompyScreenView.elements[ 0 ].bodies.length
+            y: -0.40 / mrchompyScreenView.elements[ 0 ].bodies.length
           } );
         }
       }
       triangles.length = 0;
       for ( var i = 0; i < mrchompyScreenView.elements.length; i++ ) {
         var element = mrchompyScreenView.elements[ i ];
-        for ( var k = 0; k < element.bodies.length; k++ ) {
-          var body = element.bodies[ k ];
+        if ( element.bodies ) {
+          for ( var k = 0; k < element.bodies.length; k++ ) {
+            var body = element.bodies[ k ];
 
-          triangles.push( {
-            x1: body.position.x, y1: body.position.y,
-            x2: body.position.x + 35, y2: body.position.y,
-            x3: body.position.x, y3: body.position.y + 35,
-            r: 0.1, g: 0.1, b: 0.1, a: 1
-          } );
+            triangles.push( {
+              x1: body.position.x, y1: body.position.y,
+              x2: body.position.x + 35, y2: body.position.y,
+              x3: body.position.x, y3: body.position.y + 35,
+              r: 0.1, g: 0.1, b: 0.1, a: 1
+            } );
+          }
+        }
+        else {
+          if ( element.label === 'Rectangle Body' ) {
+            var body = element;
+
+            triangles.push( {
+              x1: body.vertices[ 0 ].x, y1: body.vertices[ 0 ].y,
+              x2: body.vertices[ 1 ].x, y2: body.vertices[ 1 ].y,
+              x3: body.vertices[ 2 ].x, y3: body.vertices[ 2 ].y,
+              r: 0.1, g: 0.1, b: 0.1, a: 1
+            } );
+
+            triangles.push( {
+              x1: body.vertices[ 0 ].x, y1: body.vertices[ 0 ].y,
+              x2: body.vertices[ 2 ].x, y2: body.vertices[ 2 ].y,
+              x3: body.vertices[ 3 ].x, y3: body.vertices[ 3 ].y,
+              r: 0.1, g: 0.1, b: 0.1, a: 1
+            } );
+          }
         }
       }
 
-      var addRectangle = function( x, y, width, height, r, g, b, a ) {
-        triangles.push( { x1: x, y1: y, x2: x + width, y2: y, x3: x + width, y3: y + height, r: r, g: g, b: b, a: a } );
-        triangles.push( {
-          x1: x,
-          y1: y,
-          x2: x,
-          y2: y + height,
-          x3: x + width,
-          y3: y + height,
-          r: r,
-          g: g,
-          b: b,
-          a: a
-        } );
-      };
-      addRectangle( -1000, -1000, 1000 + 25, 600+1000, 0.1, 0.1, 0.1, 0.3 );
-      addRectangle( -1000, 600, 10000, 1000, 9/255, 46/255, 13/255, 1 );
+      addRectangle( -1000, -1000, 1000 + 25, 600 + 1000, 0.1, 0.1, 0.1, 0.3 );
+      addRectangle( -1000, 600, 10000, 1000, 9 / 255, 46 / 255, 13 / 255, 1 );
 
       offset.x = -mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.x + this.layoutBounds.width / 2;
       titleNode.x = offset.x + 420;
