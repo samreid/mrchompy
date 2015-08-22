@@ -50,12 +50,6 @@ define( function( require ) {
       Query = Matter.Query,
       Svg = Matter.Svg;
 
-    // MatterTools aliases
-    if ( window.MatterTools ) {
-      var Gui = MatterTools.Gui,
-        Inspector = MatterTools.Inspector;
-    }
-
     var _isBrowser = true;
 
     var _engine,
@@ -85,10 +79,6 @@ define( function( require ) {
       var container = document.getElementById( 'canvas-container' );
       _engine = Engine.create( container, options );
 
-      // add a mouse controlled constraint
-      _mouseConstraint = MouseConstraint.create( _engine );
-      World.add( _engine.world, _mouseConstraint );
-
       // engine reference for external use
       Matter.Demo._engine = _engine;
 
@@ -112,6 +102,13 @@ define( function( require ) {
     Demo.mixed = function() {
       var _world = _engine.world;
 
+      _world.bounds = {
+        min: {
+          x: 0, y: 0
+        },
+        max: { x: 5000, y: 800 }
+      };
+
       Demo.reset();
 
       var particleOptions = {
@@ -134,8 +131,7 @@ define( function( require ) {
     };
 
     Demo.reset = function() {
-      var _world = _engine.world,
-        i;
+      var _world = _engine.world, i;
 
       World.clear( _world );
       Engine.clear( _engine );
@@ -194,9 +190,9 @@ define( function( require ) {
 
       var offset = 5;
       World.add( _world, [
-        Bodies.rectangle( 400, -offset, 800.5 + 2 * offset, 50.5, { isStatic: true } ),
-        Bodies.rectangle( 400, 600 + offset, 800.5 + 2 * offset, 50.5, { isStatic: true } ),
-        Bodies.rectangle( 800 + offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true } ),
+        //Bodies.rectangle( 400, -offset, 800.5 + 2 * offset, 50.5, { isStatic: true } ),
+        Bodies.rectangle( 400, 600 + offset, 10000, 50.5, { isStatic: true } ),
+        //Bodies.rectangle( 800 + offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true } ),
         Bodies.rectangle( -offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true } )
       ] );
     };
@@ -246,6 +242,25 @@ define( function( require ) {
           } );
         }
       }
+
+      var addRectangle = function( x, y, width, height, r, g, b, a ) {
+        triangles.push( { x1: x, y1: y, x2: x + width, y2: y, x3: x + width, y3: y + height, r: r, g: g, b: b, a: a } );
+        triangles.push( {
+          x1: x,
+          y1: y,
+          x2: x,
+          y2: y + height,
+          x3: x + width,
+          y3: y + height,
+          r: r,
+          g: g,
+          b: b,
+          a: a
+        } );
+      };
+      addRectangle( -1000, 600, 10000, 100, 1, 0, 0, 1 );
+      addRectangle( -1000, 0, 1000 + 25, 600, 0.1, 0.1, 0.1, 0.3 );
+
       monsterNode.invalidatePaint();
     };
 
