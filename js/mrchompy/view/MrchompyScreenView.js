@@ -121,7 +121,7 @@ define( function( require ) {
 
       var elements = [
         //xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions
-        Composites.softBody( 800, 0, 6, 6, 0, 0, true, 10, particleOptions ),
+        Composites.softBody( 800, 0, 6, 6, 0, 0, true, 27, particleOptions ),
         //Composites.softBody( 250, 300, 8, 3, 0, 0, true, 15, particleOptions ),
         //Composites.softBody( 250, 400, 4, 4, 0, 0, true, 15, particleOptions ),
         Bodies.rectangle( 200, 100, 100, 100 )
@@ -246,7 +246,7 @@ define( function( require ) {
     this.step = function( dt ) {
 
       console.log( _engine.pairs.collisionActive.length );
-      var force = 0.01;
+      var force = 0.05;
       if ( pressedKeys[ 39 ] ) {
 
         // right
@@ -256,12 +256,12 @@ define( function( require ) {
       if ( pressedKeys[ 37 ] ) {
         Matter.Body.applyForce( mrchompyScreenView.elements[ 0 ].bodies[ 0 ], { x: 0, y: 0 }, { x: -force, y: 0 } );
       }
-      if ( pressedKeys[ 38 ] && mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.y > 300 && _engine.pairs.collisionActive.length > 35 ) {
+      if ( pressedKeys[ 38 ] && _engine.pairs.collisionActive.length > 35 ) {
         for ( var i = 0; i < mrchompyScreenView.elements[ 0 ].bodies.length; i++ ) {
           var b = mrchompyScreenView.elements[ 0 ].bodies[ i ];
           Matter.Body.applyForce( b, { x: 0, y: 0 }, {
             x: 0,
-            y: -0.40 / mrchompyScreenView.elements[ 0 ].bodies.length
+            y: -2 / mrchompyScreenView.elements[ 0 ].bodies.length
           } );
         }
       }
