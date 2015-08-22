@@ -136,7 +136,7 @@ define( function( require ) {
 
       Composites.chain( ropeA, 0.5, 0, -0.5, 0, { stiffness: 0.8, length: 2 } );
       Composite.add( ropeA, Constraint.create( {
-        bodyA: elements[ 0 ].bodies[ 0 ],
+        bodyA: elements[ 0 ].bodies[ 6 ],
         bodyB: ropeA.bodies[ ropeA.bodies.length - 1 ],
         stiffness: 1
       } ) );
@@ -145,20 +145,20 @@ define( function( require ) {
 
       groupId = Body.nextGroupId();
 
-      var ropeB = Composites.stack( 1000, 0, 5, 2, 10, 10, function( x, y, column, row ) {
-        return Bodies.rectangle( x, y, 50, 20, { groupId: groupId } );
-      } );
+      //var ropeB = Composites.stack( 700, 400, 5, 2, 10, 10, function( x, y, column, row ) {
+      //  return Bodies.rectangle( x, y, 50, 20, { groupId: groupId } );
+      //} );
 
-      Composites.chain( ropeB, 0.5, 0, -0.5, 0, { stiffness: 0.8, length: 2 } );
-      Composite.add( ropeB, Constraint.create( {
-        bodyA: elements[ 0 ].bodies[ 5 ],
-        bodyB: ropeB.bodies[ 0 ],
-        stiffness: 1
-      } ) );
-
-      World.add( _world, ropeB );
-
-      elements = elements.concat( ropeB );
+      //Composites.chain( ropeB, 0.5, 0, -0.5, 0, { stiffness: 0.8, length: 2 } );
+      //Composite.add( ropeB, Constraint.create( {
+      //  bodyA: elements[ 0 ].bodies[ 30 ],
+      //  bodyB: ropeB.bodies[ 0 ],
+      //  stiffness: 1
+      //} ) );
+      //
+      //World.add( _world, ropeB );
+      //
+      //elements = elements.concat( ropeB );
 
       mrchompyScreenView.elements = elements;
     };
@@ -294,14 +294,24 @@ define( function( require ) {
         if ( element.bodies ) {
           for ( var k = 0; k < element.bodies.length; k++ ) {
             var body = element.bodies[ k ];
-            console.log( 'v', body.vertices.length );
 
-            triangles.push( {
-              x1: body.position.x, y1: body.position.y,
-              x2: body.position.x + 35, y2: body.position.y,
-              x3: body.position.x, y3: body.position.y + 35,
-              r: k === 35 ? 1 : 0.1, g: 0.1, b: 0.1, a: 1
-            } );
+            for ( var v = 0; v < body.vertices.length - 2; v++ ) {
+              var a = body.vertices[ v ];
+              var b = body.vertices[ v + 1 ];
+              var c = body.vertices[ v + 2 ];
+              triangles.push( {
+                x1: a.x,
+                y1: a.y,
+                x2: b.x,
+                y2: b.y,
+                x3: c.x,
+                y3: c.y,
+                r: k === 30 ? 1 : 0.1,
+                g: 0.1,
+                b: 0.1,
+                a: 1
+              } );
+            }
           }
         }
         else {
@@ -328,11 +338,10 @@ define( function( require ) {
       addRectangle( -1000, -1000, 1000 + 25, 600 + 1000, 0.1, 0.1, 0.1, 0.3 );
       addRectangle( -1000, 600, 10000, 1000, 9 / 255, 46 / 255, 13 / 255, 1 );
 
-      offset.x = -mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.x + this.layoutBounds.width / 2;
+      offset.x = -mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.x + this.layoutBounds.width / 2-300;
       titleNode.x = offset.x + 420;
       monsterNode.invalidatePaint();
     };
-
 
     // Key listeners 
     // http://stackoverflow.com/questions/16089421/simplest-way-to-detect-keypresses-in-javascript
