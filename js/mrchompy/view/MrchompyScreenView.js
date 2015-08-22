@@ -82,25 +82,18 @@ define( function( require ) {
 
       // create a Matter engine
       // NOTE: this is actually Matter.Engine.create(), see the aliases at top of this file
-      if ( _isBrowser ) {
-        var container = document.getElementById( 'canvas-container' );
-        _engine = Engine.create( container, options );
+      var container = document.getElementById( 'canvas-container' );
+      _engine = Engine.create( container, options );
 
-        // add a mouse controlled constraint
-        _mouseConstraint = MouseConstraint.create( _engine );
-        World.add( _engine.world, _mouseConstraint );
-      }
-      else {
-        _engine = Engine.create( options );
-        _engine.render = {};
-        _engine.render.options = {};
-      }
+      // add a mouse controlled constraint
+      _mouseConstraint = MouseConstraint.create( _engine );
+      World.add( _engine.world, _mouseConstraint );
 
       // engine reference for external use
       Matter.Demo._engine = _engine;
 
       // run the engine
-      _runner = Engine.run( _engine );
+      Engine.run( _engine );
 
       Demo.mixed();
     };
