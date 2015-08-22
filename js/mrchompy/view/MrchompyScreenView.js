@@ -208,12 +208,6 @@ define( function( require ) {
       // reset random seed
       Common._seed = 0;
 
-      // reset mouse offset and scale (only required for Demo.views)
-      if ( _mouseConstraint ) {
-        Mouse.setScale( _mouseConstraint.mouse, { x: 1, y: 1 } );
-        Mouse.setOffset( _mouseConstraint.mouse, { x: 0, y: 0 } );
-      }
-
       _engine.enableSleeping = false;
       _engine.world.gravity.y = 1;
       _engine.world.gravity.x = 0;
@@ -226,35 +220,6 @@ define( function( require ) {
         Bodies.rectangle( 800 + offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true } ),
         Bodies.rectangle( -offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true } )
       ] );
-
-      if ( _mouseConstraint ) {
-        World.add( _world, _mouseConstraint );
-      }
-
-      if ( _engine.render ) {
-        var renderOptions = _engine.render.options;
-        renderOptions.wireframes = true;
-        renderOptions.hasBounds = false;
-        renderOptions.showDebug = false;
-        renderOptions.showBroadphase = false;
-        renderOptions.showBounds = false;
-        renderOptions.showVelocity = false;
-        renderOptions.showCollisions = false;
-        renderOptions.showAxes = false;
-        renderOptions.showPositions = false;
-        renderOptions.showAngleIndicator = true;
-        renderOptions.showIds = false;
-        renderOptions.showShadows = false;
-        renderOptions.showVertexNumbers = false;
-        renderOptions.showConvexHulls = false;
-        renderOptions.showInternalEdges = false;
-        renderOptions.showSeparations = false;
-        renderOptions.background = '#fff';
-
-        if ( _isMobile ) {
-          renderOptions.showDebug = true;
-        }
-      }
     };
 
     Demo.init();
