@@ -23,7 +23,9 @@ define( function( require ) {
    */
   function MrchompyScreenView( mrchompyModel ) {
 
-    ScreenView.call( this );
+    ScreenView.call( this, {
+      layoutBounds: new Bounds2( 0, 0, 1024, 618 )
+    } );
     var mrchompyScreenView = this;
 
     var Matter = window.Matter;
@@ -126,6 +128,23 @@ define( function( require ) {
       ];
       World.add( _world, elements );
 
+      var groupId = Body.nextGroupId();
+
+      var ropeA = Composites.stack( 200, 100, 5, 2, 10, 10, function( x, y, column, row ) {
+        return Bodies.rectangle( x, y, 50, 20, { groupId: groupId } );
+      } );
+
+      Composites.chain( ropeA, 0.5, 0, -0.5, 0, { stiffness: 0.8, length: 2 } );
+      Composite.add( ropeA, Constraint.create( {
+        bodyB: ropeA.bodies[ 0 ],
+        pointB: { x: -25, y: 0 },
+        pointA: { x: 200, y: 100 },
+        stiffness: 0.5
+      } ) );
+
+      World.add( _world, ropeA );
+
+      elements = elements.concat( ropeA );
       mrchompyScreenView.elements = elements;
     };
 
@@ -224,10 +243,9 @@ define( function( require ) {
       } );
     };
 
-    var timeSinceJump = 1000000;
     this.step = function( dt ) {
 
-      console.log(_engine.pairs.collisionActive.length);
+      console.log( _engine.pairs.collisionActive.length );
       var force = 0.01;
       if ( pressedKeys[ 39 ] ) {
 
