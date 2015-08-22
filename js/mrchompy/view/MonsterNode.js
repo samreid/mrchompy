@@ -12,10 +12,10 @@ define( function( require ) {
    * @param {ModelViewTransform2} modelViewTransform - converts between model and view co-ordinates
    * @param {number} stageWidth - width of the dev area
    * @param {number} stageHeight - height of the dev area
-   * @param {ObservableArray.<LightRay>} rays -
+   * @param {} triangles -
    * @constructor
    */
-  function MonsterNode( stageWidth, stageHeight, rays ) {
+  function MonsterNode( stageWidth, stageHeight, triangles ) {
 
     WebGLNode.call( this, {
       canvasBounds: new Bounds2( 0, 0, stageWidth, stageHeight )
@@ -23,7 +23,7 @@ define( function( require ) {
     this.stageHeight = stageHeight; // @private
     this.stageWidth = stageWidth; // @private
 
-    this.rays = rays;
+    this.triangles = triangles;
     this.invalidatePaint();
 
     this.strokeWidth = 10;
@@ -84,41 +84,19 @@ define( function( require ) {
       var points = [];
       var colors = [];
 
-      for ( var i = 0; i < this.rays.length; i++ ) {
-        var ray = this.rays[ i ];
-
-        // iPad3 shows a opacity=0 ray as opacity=1 for unknown reasons, so we simply omit those rays
-
-        var x1 = ray.tail.x;
-        var y1 = ray.tail.y;
-        var x2 = ray.tip.x;
-        var y2 = ray.tip.y;
-
-        var distance = Math.sqrt( (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) );
-        var unitVectorX = (x2 - x1) / distance;
-        var unitVectorY = (y2 - y1) / distance;
-
-        var perpendicularVectorX = -unitVectorY * this.strokeWidth / 2;
-        var perpendicularVectorY = unitVectorX * this.strokeWidth / 2;
+      for ( var i = 0; i < this.triangles.length; i++ ) {
+        var triangle = this.triangles[ i ];
 
         points.push(
-          x1 + perpendicularVectorX, y1 + perpendicularVectorY, 0.2,
-          x2 + perpendicularVectorX, y2 + perpendicularVectorY, 0.2,
-          x1 - perpendicularVectorX, y1 - perpendicularVectorY, 0.2,
-
-          x1 - perpendicularVectorX, y1 - perpendicularVectorY, 0.2,
-          x2 + perpendicularVectorX, y2 + perpendicularVectorY, 0.2,
-          x2 - perpendicularVectorX, y2 - perpendicularVectorY, 0.2
+          triangle.x1, triangle.y1, 0.2,
+          triangle.x2, triangle.y2, 0.2,
+          triangle.x3, triangle.y3, 0.2
         );
 
         colors.push(
-          1, 0, 0, 1,
-          1, 0, 0, 1,
-          1, 0, 0, 1,
-
-          1, 0, 0, 1,
-          1, 0, 0, 1,
-          1, 0, 0, 1
+          triangle.r, triangle.g, triangle.b, triangle.a,
+          triangle.r, triangle.g, triangle.b, triangle.a,
+          triangle.r, triangle.g, triangle.b, triangle.a
         );
       }
 
@@ -147,7 +125,7 @@ define( function( require ) {
       gl.vertexAttribPointer( shaderProgram.attributeLocations.aColor, 4, gl.FLOAT, false, 0, 0 );
 
       // 2 triangles per ray
-      gl.drawArrays( gl.TRIANGLES, 0, this.rays.length * 3 * 2 );
+      gl.drawArrays( gl.TRIANGLES, 0, this.triangles.length * 3 );
 
       shaderProgram.unuse();
     },

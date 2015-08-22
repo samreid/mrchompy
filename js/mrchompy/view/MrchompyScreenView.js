@@ -23,8 +23,8 @@ define( function( require ) {
 
     ScreenView.call( this );
 
-    var rays = [ { tail: new Vector2( 0, 0 ), tip: new Vector2( 100, 100 ) } ];
-    var monsterNode = new MonsterNode( this.layoutBounds.width, this.layoutBounds.height, rays );
+    var triangles = [ { x1: 0, y1: 0, x2: 100, y2: 0, x3: 50, y3: 50, r: 1, g: 0, b: 0, a: 1 } ];
+    var monsterNode = new MonsterNode( this.layoutBounds.width, this.layoutBounds.height, triangles );
     this.addChild( monsterNode );
 
     this.events.on( 'layoutFinished', function( dx, dy, width, height ) {
