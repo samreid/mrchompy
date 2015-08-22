@@ -15,7 +15,7 @@ define( function( require ) {
    * @param {} triangles -
    * @constructor
    */
-  function MonsterNode( stageWidth, stageHeight, triangles ) {
+  function MonsterNode( stageWidth, stageHeight, triangles, offset ) {
 
     WebGLNode.call( this, {
       canvasBounds: new Bounds2( 0, 0, stageWidth, stageHeight )
@@ -24,6 +24,7 @@ define( function( require ) {
     this.stageWidth = stageWidth; // @private
 
     this.triangles = triangles;
+    this.offset = offset;
     this.invalidatePaint();
 
     this.strokeWidth = 10;
@@ -88,9 +89,9 @@ define( function( require ) {
         var triangle = this.triangles[ i ];
 
         points.push(
-          triangle.x1, triangle.y1, 0.2,
-          triangle.x2, triangle.y2, 0.2,
-          triangle.x3, triangle.y3, 0.2
+          triangle.x1 + this.offset.x, triangle.y1 + this.offset.y, 0.2,
+          triangle.x2 + this.offset.x, triangle.y2 + this.offset.y, 0.2,
+          triangle.x3 + this.offset.x, triangle.y3 + this.offset.y, 0.2
         );
 
         colors.push(

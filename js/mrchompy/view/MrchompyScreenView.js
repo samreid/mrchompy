@@ -119,7 +119,7 @@ define( function( require ) {
 
       var elements = [
         //xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions
-        Composites.softBody( 250, 100, 6, 6, 0, 0, true, 10, particleOptions ),
+        Composites.softBody( 800, 0, 6, 6, 0, 0, true, 10, particleOptions ),
         //Composites.softBody( 250, 300, 8, 3, 0, 0, true, 15, particleOptions ),
         //Composites.softBody( 250, 400, 4, 4, 0, 0, true, 15, particleOptions )
       ];
@@ -198,7 +198,8 @@ define( function( require ) {
     Demo.init();
 
     var triangles = [ { x1: 0, y1: 0, x2: 100, y2: 0, x3: 50, y3: 50, r: 1, g: 0, b: 0, a: 1 } ];
-    var monsterNode = new MonsterNode( this.layoutBounds.width, this.layoutBounds.height, triangles );
+    var offset = new Vector2( 0, 0 );
+    var monsterNode = new MonsterNode( this.layoutBounds.width, this.layoutBounds.height, triangles, offset );
     this.addChild( monsterNode );
 
     this.events.on( 'layoutFinished', function( dx, dy, width, height ) {
@@ -256,9 +257,11 @@ define( function( require ) {
           a: a
         } );
       };
-      addRectangle( -1000, 600, 10000, 100, 1, 0, 0, 1 );
-      addRectangle( -1000, 0, 1000 + 25, 600, 0.1, 0.1, 0.1, 0.3 );
+      addRectangle( -1000, -1000, 1000 + 25, 600+1000, 0.1, 0.1, 0.1, 0.3 );
+      addRectangle( -1000, 600, 10000, 1000, 9/255, 46/255, 13/255, 1 );
 
+      offset.x = -mrchompyScreenView.elements[ 0 ].bodies[ 0 ].position.x + this.layoutBounds.width / 2;
+      titleNode.x = offset.x + 420;
       monsterNode.invalidatePaint();
     };
 
@@ -292,10 +295,11 @@ define( function( require ) {
       pressedKeys[ e.keyCode ] = false;
     } );
 
-    this.addChild( new Image( title, {
+    var titleNode = new Image( title, {
       centerX: this.layoutBounds.centerX,
       top: 100
-    } ) );
+    } );
+    this.addChild( titleNode );
   }
 
   return inherit( ScreenView, MrchompyScreenView, {} );
