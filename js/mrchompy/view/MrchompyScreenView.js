@@ -133,38 +133,23 @@ define( function( require ) {
 
       Demo.reset();
 
-      var stack = Composites.stack( 20, 20, 15, 4, 0, 0, function( x, y, column, row ) {
-        var sides = Math.round( Common.random( 1, 8 ) );
+      var particleOptions = {
+        friction: 0.05,
+        frictionStatic: 0.1,
+        render: { visible: true }
+      };
 
-        // triangles can be a little unstable, so avoid until fixed
-        sides = (sides === 3) ? 4 : sides;
+      var elements = [
+        //xx, yy, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions
+        Composites.softBody( 250, 100, 10, 10, 0, 0, true, 10, particleOptions ),
+        //Composites.softBody( 250, 300, 8, 3, 0, 0, true, 15, particleOptions ),
+        //Composites.softBody( 250, 400, 4, 4, 0, 0, true, 15, particleOptions )
+      ];
+      World.add( _world, elements );
 
-        // round the edges of some bodies
-        var chamfer = null;
-        if ( sides > 2 && Common.random() > 0.7 ) {
-          chamfer = {
-            radius: 10
-          };
-        }
-
-        switch( Math.round( Common.random( 0, 1 ) ) ) {
-          case 0:
-            if ( Common.random() < 0.8 ) {
-              return Bodies.rectangle( x, y, Common.random( 25, 50 ), Common.random( 25, 50 ), { chamfer: chamfer } );
-            }
-            else {
-              return Bodies.rectangle( x, y, Common.random( 80, 120 ), Common.random( 25, 30 ), { chamfer: chamfer } );
-            }
-            break;
-          case 1:
-            return Bodies.polygon( x, y, sides, Common.random( 25, 50 ), { chamfer: chamfer } );
-        }
-      } );
-
-      mrchompyScreenView.stack = stack;
-      World.add( _world, stack );
-
+      mrchompyScreenView.elements = elements;
       var renderOptions = _engine.render.options;
+      renderOptions.showAngleIndicator = false;
     };
 
     Demo.reset = function() {
@@ -283,13 +268,18 @@ define( function( require ) {
 
     this.step = function( dt ) {
       triangles.length = 0;
-      for ( var i = 0; i < mrchompyScreenView.stack.bodies.length; i++ ) {
-        var element = mrchompyScreenView.stack.bodies[ i ];
-        triangles.push( {
-          x1: element.position.x, y1: element.position.y,
-          x2: element.position.x + 10, y2: element.position.y,
-          x3: element.position.x, y3: element.position.y + 10, r: 1, g: 0, b: 0, a: 1
-        } );
+      for ( var i = 0; i < mrchompyScreenView.elements.length; i++ ) {
+        var element = mrchompyScreenView.elements[ i ];
+        for ( var k = 0; k < element.bodies.length; k++ ) {
+          var body = element.bodies[ k ];
+
+          triangles.push( {
+            x1: body.position.x, y1: body.position.y,
+            x2: body.position.x + 35, y2: body.position.y,
+            x3: body.position.x, y3: body.position.y + 35,
+            r: 0.1, g: 0.1, b: 0.1, a: 1
+          } );
+        }
       }
       monsterNode.invalidatePaint();
     };

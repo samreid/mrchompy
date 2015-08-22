@@ -28,7 +28,7 @@ define( function( require ) {
     Screen.call( this, mrchompySimString, icon,
       function() { return new MrchompyModel(); },
       function( model ) { return new MrchompyScreenView( model ); },
-      { backgroundColor: 'white' }
+      { backgroundColor: 'black' }
     );
   }
 
