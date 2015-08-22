@@ -26,7 +26,7 @@ define( function( require ) {
     var maxAlpha1 = Math.PI / 5;
     var minAlpha1 = 0;
     var maxAlpha2 = Math.PI / 8;
-    var minAlpha2 = 0;
+    var minAlpha2 = Math.PI / 16;
     var monsterNode = this;
 
     // test with oscillation
