@@ -99,24 +99,10 @@ define( function( require ) {
       // engine reference for external use
       Matter.Demo._engine = _engine;
 
-      // skip runner when performing automated tests
-      if ( _isAutomatedTest ) {
-        return;
-      }
-
       // run the engine
       _runner = Engine.run( _engine );
 
-      // default scene function name
-      _sceneName = 'mixed';
-
-      // get the scene function name from hash
-      if ( window.location.hash.length !== 0 ) {
-        _sceneName = window.location.hash.replace( '#', '' ).replace( '-inspect', '' );
-      }
-
-      // set up a scene with bodies
-      Demo[ _sceneName ]();
+      Demo.mixed();
     };
 
     // call init when the page has loaded fully
