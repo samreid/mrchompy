@@ -115,9 +115,6 @@ define( function( require ) {
 
       // set up a scene with bodies
       Demo[ _sceneName ]();
-
-      // set up demo interface (see end of this file)
-      Demo.initControls();
     };
 
     // call init when the page has loaded fully
@@ -273,92 +270,6 @@ define( function( require ) {
       }
     };
 
-    Demo.initControls = function() {
-      //var demoSelect = document.getElementById('demo-select'),
-      //  demoReset = document.getElementById('demo-reset');
-
-      // create a Matter.Gui
-      //if (!_isMobile && Gui) {
-      //  _gui = Gui.create(_engine, _runner);
-      //
-      //  // need to add mouse constraint back in after gui clear or load is pressed
-      //  Events.on(_gui, 'clear load', function() {
-      //    _mouseConstraint = MouseConstraint.create(_engine);
-      //    World.add(_engine.world, _mouseConstraint);
-      //  });
-      //
-      //  // need to rebind mouse on render change
-      //  Events.on(_gui, 'setRenderer', function() {
-      //    Mouse.setElement(_mouseConstraint.mouse, _engine.render.canvas);
-      //  });
-      //}
-
-      // create a Matter.Inspector
-      //if (!_isMobile && Inspector && _useInspector) {
-      //  _inspector = Inspector.create(_engine, _runner);
-      //
-      //  Events.on(_inspector, 'import', function() {
-      //    _mouseConstraint = MouseConstraint.create(_engine);
-      //    World.add(_engine.world, _mouseConstraint);
-      //  });
-      //
-      //  Events.on(_inspector, 'play', function() {
-      //    _mouseConstraint = MouseConstraint.create(_engine);
-      //    World.add(_engine.world, _mouseConstraint);
-      //  });
-      //
-      //  Events.on(_inspector, 'selectStart', function() {
-      //    _mouseConstraint.constraint.render.visible = false;
-      //  });
-      //
-      //  Events.on(_inspector, 'selectEnd', function() {
-      //    _mouseConstraint.constraint.render.visible = true;
-      //  });
-      //}
-
-      // go fullscreen when using a mobile device
-      //if (_isMobile) {
-      //  var body = document.body;
-      //
-      //  body.className += ' is-mobile';
-      //  _engine.render.canvas.addEventListener('touchstart', Demo.fullscreen);
-      //
-      //  var fullscreenChange = function() {
-      //    var fullscreenEnabled = document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled;
-      //
-      //    // delay fullscreen styles until fullscreen has finished changing
-      //    setTimeout(function() {
-      //      if (fullscreenEnabled) {
-      //        body.className += ' is-fullscreen';
-      //      } else {
-      //        body.className = body.className.replace('is-fullscreen', '');
-      //      }
-      //    }, 2000);
-      //  };
-      //
-      //  document.addEventListener('webkitfullscreenchange', fullscreenChange);
-      //  document.addEventListener('mozfullscreenchange', fullscreenChange);
-      //  document.addEventListener('fullscreenchange', fullscreenChange);
-      //}
-
-      // initialise demo selector
-      //demoSelect.value = _sceneName;
-
-      //demoSelect.addEventListener('change', function(e) {
-      //  Demo[_sceneName = e.target.value]();
-      //  Gui.update(_gui);
-      //
-      //  var scrollY = window.scrollY;
-      //  window.location.hash = _sceneName;
-      //  window.scrollY = scrollY;
-      //});
-
-      //demoReset.addEventListener('click', function(e) {
-      //  Demo[_sceneName]();
-      //  Gui.update(_gui);
-      //});
-    };
-
     Demo.init();
 
     var triangles = [ { x1: 0, y1: 0, x2: 100, y2: 0, x3: 50, y3: 50, r: 1, g: 0, b: 0, a: 1 } ];
@@ -384,12 +295,5 @@ define( function( require ) {
     };
   }
 
-  return inherit( ScreenView, MrchompyScreenView, {
-
-    //TODO Called by the animation loop. Optional, so if your view has no animation, please delete this.
-    step: function( dt ) {
-
-      //TODO Handle view animation here.
-    }
-  } );
+  return inherit( ScreenView, MrchompyScreenView, {} );
 } );
