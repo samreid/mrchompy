@@ -25,19 +25,20 @@ define( function( require ) {
     var ground = new Rectangle( -1000, 600, 20000, 1000, { fill: '#092e0d' } );
     this.addChild( ground );
 
-    var monsterNode = new MonsterNode();
-
-    monsterNode.bottom = ground.top;
-    this.addChild( monsterNode );
-
     var floorY = 400;
     var monsterModel = {
       x: 200,
       jumping: false,
       vy: 0,
       gravity: 5000,
-      y: floorY
+      y: floorY,
+      jawsClosing: false,
+      jawsOpening: false,
+      mouthOpenAmount: 1
     };
+
+    var monsterNode = new MonsterNode( monsterModel );
+    this.addChild( monsterNode );
 
     this.step = function( dt ) {
 
@@ -53,7 +54,25 @@ define( function( require ) {
       }
       if ( pressedKeys[ 38 ] && !monsterModel.jumping ) {
         monsterModel.jumping = true;
-        monsterModel.vy = -1000;
+        monsterModel.vy = -2000;
+      }
+      if ( pressedKeys[ 32 ] && !monsterModel.jawsClosing && !monsterModel.jawsOpening ) {
+        monsterModel.jawsClosing = true;
+      }
+      if ( monsterModel.jawsClosing && monsterModel.mouthOpenAmount <= 0 ) {
+        monsterModel.mouthOpenAmount = 0;
+        monsterModel.jawsClosing = false;
+        monsterModel.jawsOpening = true;
+      }
+      if ( monsterModel.jawsOpening && monsterModel.mouthOpenAmount >= 1 ) {
+        monsterModel.mouthOpenAmount = 1;
+        monsterModel.jawsOpening = false;
+      }
+      if ( monsterModel.jawsClosing ) {
+        monsterModel.mouthOpenAmount -= 0.1;
+      }
+      if ( monsterModel.jawsOpening ) {
+        monsterModel.mouthOpenAmount += 0.1;
       }
 
       monsterModel.vy = monsterModel.vy + monsterModel.gravity * dt;
@@ -65,7 +84,7 @@ define( function( require ) {
 
       this.removeChild( monsterNode );
 
-      monsterNode = new MonsterNode();
+      monsterNode = new MonsterNode( monsterModel );
       monsterNode.x = monsterModel.x;
       monsterNode.y = monsterModel.y;
       this.addChild( monsterNode );
