@@ -138,7 +138,12 @@ define( function( require ) {
             }
           }
         }
-        if ( person.spear ) {}
+        else {
+          if ( person.x <= monsterModel.x + 1000 ) {
+            person.vx = 0;
+            person.threwSpear = true;
+          }
+        }
       } );
       var deadCount = 0;
       for ( var i = 0; i < people.length; i++ ) {
