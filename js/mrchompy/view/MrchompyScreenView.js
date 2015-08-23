@@ -71,6 +71,9 @@ define( function( require ) {
         monsterModel.mouthOpenAmount = 0;
         monsterModel.jawsClosing = false;
         monsterModel.jawsOpening = true;
+        people.forEach( function( p ) {
+          p.dead = true;
+        } );
       }
       if ( monsterModel.jawsOpening && monsterModel.mouthOpenAmount >= 1 ) {
         monsterModel.mouthOpenAmount = 1;
