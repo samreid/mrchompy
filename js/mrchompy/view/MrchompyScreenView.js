@@ -101,6 +101,8 @@ define( function( require ) {
       peopleLayer.removeAllChildren();
       for ( var i = 0; i < people.length; i++ ) {
         var personNode = new PersonNode( people[ i ] );
+        personNode.x = people[ i ].x;
+        personNode.y = people[ i ].y;
         peopleLayer.addChild( personNode );
       }
     };
