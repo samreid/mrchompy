@@ -57,6 +57,13 @@ define( function( require ) {
     var monsterNode = new MonsterNode( monsterModel );
     worldNode.addChild( monsterNode );
 
+    var createSpear = function() {
+      return {
+        thrown: false,
+        x: 0
+      };
+    };
+
     var newPerson = function( x, spear ) {
       return {
         x: x,
@@ -74,7 +81,7 @@ define( function( require ) {
     var worldScale = 1;
     var people = [];
     for ( var i = 0; i < 4; i++ ) {
-      people.push( newPerson( i * 800 + 1500, false ) );
+      people.push( newPerson( i * 800 + 1500, null ) );
     }
 
     this.step = function( dt ) {
@@ -119,7 +126,7 @@ define( function( require ) {
         if ( !person.dead ) {
           person.x += person.vx * dt;
         }
-        if ( !person.spear ) {
+        if ( !person.spear || (person.spear && person.spear.thrown) ) {
           if ( person.x <= monsterModel.x + 500 && !person.scared ) {
             person.vx = Math.abs( person.vx );
             person.scared = true;
@@ -139,10 +146,14 @@ define( function( require ) {
           }
         }
         else {
-          if ( person.x <= monsterModel.x + 1000 ) {
+          if ( person.x <= monsterModel.x + 1000 && !person.spear.thrown ) {
             person.vx = 0;
-            person.threwSpear = true;
+            person.spear.thrown = true;
           }
+        }
+
+        if ( person.spear && person.spear.thrown ) {
+          person.spear.x += 800 * dt;
         }
       } );
       var deadCount = 0;
@@ -155,10 +166,10 @@ define( function( require ) {
       if ( deadCount === 4 && !addedSpears ) {
         addedSpears = true;
         zoomingOut = true;
-        people.push( newPerson( monsterModel.x + 3000, true ) );
-        people.push( newPerson( monsterModel.x + 3400, true ) );
-        people.push( newPerson( monsterModel.x + 3600, true ) );
-        people.push( newPerson( monsterModel.x + 3800, true ) );
+        people.push( newPerson( monsterModel.x + 3000, createSpear() ) );
+        people.push( newPerson( monsterModel.x + 3400, createSpear() ) );
+        people.push( newPerson( monsterModel.x + 3600, createSpear() ) );
+        people.push( newPerson( monsterModel.x + 3800, createSpear() ) );
       }
       if ( zoomingOut ) {
         worldScale = worldScale - 1.2 * dt;
@@ -197,10 +208,20 @@ define( function( require ) {
         peopleLayer.addChild( personNode );
 
         if ( people[ i ].spear ) {
-          var spear = new Line( 0, 0, 0, 120, { lineWidth: 10, stroke: '#937b33' } );
+          var spear = new Line( 0, 0, 0, 120, {
+            lineWidth: 10,
+            stroke: '#937b33',
+            rotation: -people[ i ].spear.x / 1000 * 2
+          } );
           peopleLayer.addChild( spear );
-          spear.left = personNode.right + 10;
-          spear.bottom = personNode.bottom;
+          if ( people[ i ].spear.thrown ) {
+            spear.left = personNode.right + 10 - people[ i ].spear.x;
+            spear.bottom = personNode.bottom - people[ i ].spear.x / 3;
+          }
+          else {
+            spear.left = personNode.right + 10;
+            spear.bottom = personNode.bottom;
+          }
         }
       }
 
