@@ -23,7 +23,7 @@ define( function( require ) {
    */
   function PersonNode( person ) {
     Node.call( this );
-    var head = new Rectangle( 0, 0, 50, 50, 20, 20, { fill: 'yellow', stroke: 'red' } );
+    var head = new Rectangle( 0, 0, 40, 40, 12, 12, { fill: 'yellow', stroke: 'red' } );
     this.addChild( head );
 
     var hairShape = new Shape();

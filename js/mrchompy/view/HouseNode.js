@@ -21,8 +21,12 @@ define( function( require ) {
    */
   function HouseNode() {
     Node.call( this );
-    this.addChild( new Rectangle( 0, 0, 300, 300, 10, 10, { fill: 'green' } ) );
-    this.addChild( new Path( new Shape().moveTo( 0, 0 ).lineTo( 400, 0 ).lineTo( 200, -200 ).close(), { fill: 'blue' } ) );
+    var houseBody = new Rectangle( 0, 0, 200, 200, 10, 10, { fill: 'green' } );
+    this.addChild( houseBody );
+    this.addChild( new Path( new Shape().moveTo( 0, 0 ).lineTo( 300, 0 ).lineTo( 150, -150 ).close(), {
+      fill: 'blue',
+      centerX: houseBody.centerX
+    } ) );
   }
 
   return inherit( Node, HouseNode );

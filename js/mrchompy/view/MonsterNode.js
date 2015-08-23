@@ -87,7 +87,7 @@ define( function( require ) {
         var toothPoint2y = (j1 - distanceFromFrontOfJawToTooth - toothBaseLength) * Math.sin( alpha1 );
         tooth1.lineTo( toothPoint2x, toothPoint2y );
         tooth1.close();
-        monsterNode.addChild( new Path( tooth1, { fill: 'white', stroke: 'gray', lineWidth: 2 } ) );
+        monsterNode.addChild( new Path( tooth1, { fill: 'white', boundsMethod: 'none' } ) );
       };
 
       var addUpperTooth = function( distanceFromFrontOfJawToTooth, toothBaseLength, toothHeight, toothAngle ) {
@@ -103,7 +103,12 @@ define( function( require ) {
         var toothPoint2y = -(j2 - distanceFromFrontOfJawToTooth - toothBaseLength) * Math.sin( alpha2 );
         tooth.lineTo( toothPoint2x, toothPoint2y );
         tooth.close();
-        monsterNode.addChild( new Path( tooth, { fill: 'white', stroke: 'gray', lineWidth: 2 } ) );
+        monsterNode.addChild( new Path( tooth, {
+          fill: 'white',
+          boundsMethod: 'none',
+          stroke: 'gray',
+          lineWidth: 2
+        } ) );
       };
 
       addLowerTooth( 0, 30, 80, toRadians( 60 ) );

@@ -25,8 +25,10 @@ define( function( require ) {
 
     ScreenView.call( this );
 
+    var worldNode = new Node();
+    this.addChild( worldNode );
     var ground = new Rectangle( -1000, 600, 20000, 1000, { fill: '#092e0d' } );
-    this.addChild( ground );
+    worldNode.addChild( ground );
 
     var floorY = 400;
     var monsterModel = {
@@ -43,12 +45,12 @@ define( function( require ) {
     var houseNode = new HouseNode();
     houseNode.x = 800;
     houseNode.bottom = ground.top;
-    this.addChild( houseNode );
+    worldNode.addChild( houseNode );
 
     var peopleLayer = new Node();
-    this.addChild( peopleLayer );
+    worldNode.addChild( peopleLayer );
     var monsterNode = new MonsterNode( monsterModel );
-    this.addChild( monsterNode );
+    worldNode.addChild( monsterNode );
 
     var people = [ {
       x: 600,
@@ -99,12 +101,12 @@ define( function( require ) {
         monsterModel.jumping = false;
       }
 
-      this.removeChild( monsterNode );
+      worldNode.removeChild( monsterNode );
 
       monsterNode = new MonsterNode( monsterModel );
       monsterNode.x = monsterModel.x;
       monsterNode.y = monsterModel.y;
-      this.addChild( monsterNode );
+      worldNode.addChild( monsterNode );
 
       peopleLayer.removeAllChildren();
       for ( var i = 0; i < people.length; i++ ) {
@@ -112,6 +114,10 @@ define( function( require ) {
         personNode.x = people[ i ].x;
         personNode.y = people[ i ].y;
         peopleLayer.addChild( personNode );
+      }
+
+      if ( monsterModel.x >= 400 ) {
+        worldNode.x = -monsterModel.x + 400;
       }
     };
 
