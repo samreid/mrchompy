@@ -15,6 +15,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
   var Circle = require( 'SCENERY/nodes/Circle' );
+  var Text = require( 'SCENERY/nodes/Text' );
 
   /**
    *
@@ -32,9 +33,16 @@ define( function( require ) {
     hairShape.close();
 
     var eyeNode = new Rectangle( 6, 12, 14, 14, 5, 5, { fill: 'white', stroke: 'black' } );
-    this.addChild( eyeNode );
+
     var pupil = new Circle( 4, { left: eyeNode.left, centerY: eyeNode.centerY, fill: 'black' } );
-    this.addChild( pupil );
+
+    if ( person.dead ) {
+      this.addChild( new Text( 'x', { fontSize: 28, center: eyeNode.center } ) );
+    }
+    else {
+      this.addChild( eyeNode );
+      this.addChild( pupil );
+    }
 
     var body = new Rectangle( 0, 0, 40, 100, 20, 20, {
       fill: 'yellow',

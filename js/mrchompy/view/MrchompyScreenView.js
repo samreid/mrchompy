@@ -46,7 +46,8 @@ define( function( require ) {
 
     var people = [ {
       x: 600,
-      y: 450
+      y: 450,
+      dead: false
     } ];
 
     this.step = function( dt ) {
@@ -54,11 +55,9 @@ define( function( require ) {
       if ( pressedKeys[ 39 ] ) {
 
         // right
-        console.log( 'right' );
         monsterModel.x += 10;
       }
       if ( pressedKeys[ 37 ] ) {
-        console.log( 'left' );
         monsterModel.x -= 10;
       }
       if ( pressedKeys[ 38 ] && !monsterModel.jumping ) {
@@ -125,14 +124,12 @@ define( function( require ) {
     addEvent( document, "keydown", function( e ) {
       var e = e || window.event;
       // use e.keyCode
-      console.log( e.keyCode, 'down' );
       pressedKeys[ e.keyCode ] = true;
     } );
 
     addEvent( document, "keyup", function( e ) {
       var e = e || window.event;
       // use e.keyCode
-      console.log( e.keyCode, 'up' );
       pressedKeys[ e.keyCode ] = false;
     } );
 
