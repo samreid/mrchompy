@@ -21,10 +21,10 @@ define( function( require ) {
    */
   function HouseNode( options ) {
     Node.call( this );
-    var houseBody = new Rectangle( 0, 0, 200, 200, 10, 10, { fill: 'green' } );
+    var houseBody = new Rectangle( 0, 0, 200, 200, 10, 10, { fill: '#22212c' } );
     this.addChild( houseBody );
     this.addChild( new Path( new Shape().moveTo( 0, 0 ).lineTo( 300, 0 ).lineTo( 150, -150 ).close(), {
-      fill: 'blue',
+      fill: '#22212c',
       centerX: houseBody.centerX
     } ) );
     this.mutate(options);

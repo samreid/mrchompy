@@ -36,7 +36,11 @@ define( function( require ) {
 
     var eyeNode = new Rectangle( 6, 12, 14, 14, 5, 5, { fill: 'white' } );
 
-    var pupil = new Circle( 4, { left: eyeNode.left, centerY: eyeNode.centerY, fill: 'black' } );
+    var pupil = new Circle( 4, {
+      left: eyeNode.left,
+      centerY: eyeNode.centerY,
+      fill: 'black'
+    } );
 
     if ( person.dead ) {
       this.addChild( new Node( { children: [ text ], center: eyeNode.center } ) );
@@ -55,7 +59,7 @@ define( function( require ) {
 
     //var hairNode = new Path( hairShape, { fill: 'red', bottom: head.top, left: head.left } );
     //this.addChild( hairNode )
-    this.mutate(options);
+    this.mutate( options );
   }
 
   return inherit( Node, PersonNode );

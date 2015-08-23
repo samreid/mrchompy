@@ -123,7 +123,7 @@ define( function( require ) {
       addUpperTooth( 0, 30, 120, toRadians( 70 ) );
       addUpperTooth( 20, 30, 120, toRadians( 70 ) );
 
-      this.addChild( new Path( shape, { fill: 'green', stroke: 'gray' } ) );
+      this.addChild( new Path( shape, { fill: '#29532b'} ) );
 
       this.addChild( new Path( new Shape().moveTo( 0, -100 ).
           lineToRelative( 20, -50 ).

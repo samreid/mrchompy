@@ -44,8 +44,8 @@ define( function( require ) {
 
     worldNode.addChild( new HouseNode( { x: 800, bottom: ground.top } ) );
     worldNode.addChild( new HouseNode( { x: 1600, bottom: ground.top } ) );
-    worldNode.addChild( new HouseNode( { x: 2000, bottom: ground.top } ) );
     worldNode.addChild( new HouseNode( { x: 2400, bottom: ground.top } ) );
+    worldNode.addChild( new HouseNode( { x: 3200, bottom: ground.top } ) );
 
     var peopleLayer = new Node();
     worldNode.addChild( peopleLayer );
@@ -58,7 +58,10 @@ define( function( require ) {
         y: 450,
         dead: false,
         vx: -180,
-        scared: false
+        scared: false,
+        angle: 0,
+        falling: false,
+        finishedFalling: false
       };
     };
     var people = [];
@@ -71,10 +74,10 @@ define( function( require ) {
       if ( pressedKeys[ 39 ] ) {
 
         // right
-        monsterModel.x += 10;
+        monsterModel.x += 400 * dt;
       }
       if ( pressedKeys[ 37 ] ) {
-        monsterModel.x -= 10;
+        monsterModel.x -= 400 * dt;
       }
       if ( pressedKeys[ 38 ] && !monsterModel.jumping ) {
         monsterModel.jumping = true;
@@ -96,18 +99,32 @@ define( function( require ) {
         monsterModel.jawsOpening = false;
       }
       if ( monsterModel.jawsClosing ) {
-        monsterModel.mouthOpenAmount -= 0.1;
+        monsterModel.mouthOpenAmount -= 0.2;
       }
       if ( monsterModel.jawsOpening ) {
         monsterModel.mouthOpenAmount += 0.1;
       }
 
       people.forEach( function( person ) {
-        person.x += person.vx * dt;
-        if ( person.x <= monsterModel.x + 400 && !person.scared ) {
+        if ( !person.dead ) {
+          person.x += person.vx * dt;
+        }
+        if ( person.x <= monsterModel.x + 500 && !person.scared ) {
           person.vx = Math.abs( person.vx );
           person.scared = true;
-          person.vx *= 2;
+          person.vx = 320;
+        }
+        if ( person.x >= monsterModel.x + 1000 && person.scared ) {
+          person.scared = false;
+          person.vx = 0;
+        }
+        if ( person.dead && !person.finishedFalling ) {
+          person.angle = person.angle + Math.PI * 2 * dt;
+          if ( person.angle > Math.PI / 2 ) {
+            person.angle = Math.PI / 2;
+            person.falling = false;
+            person.finishedFalling = true;
+          }
         }
       } );
 
@@ -133,7 +150,8 @@ define( function( require ) {
             y: 1
           },
           centerX: people[ i ].x,
-          y: people[ i ].y
+          bottom: ground.top,
+          rotation: people[ i ].angle
         } );
         peopleLayer.addChild( personNode );
       }
