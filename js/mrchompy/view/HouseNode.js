@@ -19,7 +19,7 @@ define( function( require ) {
    *
    * @constructor
    */
-  function HouseNode() {
+  function HouseNode( options ) {
     Node.call( this );
     var houseBody = new Rectangle( 0, 0, 200, 200, 10, 10, { fill: 'green' } );
     this.addChild( houseBody );
@@ -27,6 +27,7 @@ define( function( require ) {
       fill: 'blue',
       centerX: houseBody.centerX
     } ) );
+    this.mutate(options);
   }
 
   return inherit( Node, HouseNode );

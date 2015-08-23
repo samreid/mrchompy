@@ -42,21 +42,29 @@ define( function( require ) {
       mouthOpenAmount: 1
     };
 
-    var houseNode = new HouseNode();
-    houseNode.x = 800;
-    houseNode.bottom = ground.top;
-    worldNode.addChild( houseNode );
+    worldNode.addChild( new HouseNode( { x: 800, bottom: ground.top } ) );
+    worldNode.addChild( new HouseNode( { x: 1600, bottom: ground.top } ) );
+    worldNode.addChild( new HouseNode( { x: 2000, bottom: ground.top } ) );
+    worldNode.addChild( new HouseNode( { x: 2400, bottom: ground.top } ) );
 
     var peopleLayer = new Node();
     worldNode.addChild( peopleLayer );
     var monsterNode = new MonsterNode( monsterModel );
     worldNode.addChild( monsterNode );
 
-    var people = [ {
-      x: 600,
-      y: 450,
-      dead: false
-    } ];
+    var newPerson = function( x ) {
+      return {
+        x: x,
+        y: 450,
+        dead: false,
+        vx: -180,
+        scared: false
+      };
+    };
+    var people = [];
+    for ( var i = 0; i < 4; i++ ) {
+      people.push( newPerson( i * 800 + 1500 ) );
+    }
 
     this.step = function( dt ) {
 
@@ -94,6 +102,15 @@ define( function( require ) {
         monsterModel.mouthOpenAmount += 0.1;
       }
 
+      people.forEach( function( person ) {
+        person.x += person.vx * dt;
+        if ( person.x <= monsterModel.x + 400 && !person.scared ) {
+          person.vx = Math.abs( person.vx );
+          person.scared = true;
+          person.vx *= 2;
+        }
+      } );
+
       monsterModel.vy = monsterModel.vy + monsterModel.gravity * dt;
       monsterModel.y = monsterModel.y + monsterModel.vy * dt;
       if ( monsterModel.y >= floorY ) {
@@ -110,9 +127,14 @@ define( function( require ) {
 
       peopleLayer.removeAllChildren();
       for ( var i = 0; i < people.length; i++ ) {
-        var personNode = new PersonNode( people[ i ] );
-        personNode.x = people[ i ].x;
-        personNode.y = people[ i ].y;
+        var personNode = new PersonNode( people[ i ], {
+          scale: {
+            x: people[ i ].scared ? -1 : 1,
+            y: 1
+          },
+          centerX: people[ i ].x,
+          y: people[ i ].y
+        } );
         peopleLayer.addChild( personNode );
       }
 
