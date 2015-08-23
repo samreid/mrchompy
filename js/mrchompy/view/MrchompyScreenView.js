@@ -13,6 +13,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var MonsterNode = require( 'MRCHOMPY/mrchompy/view/MonsterNode' );
+  var HouseNode = require( 'MRCHOMPY/mrchompy/view/HouseNode' );
   var PersonNode = require( 'MRCHOMPY/mrchompy/view/PersonNode' );
   var Node = require( 'SCENERY/nodes/Node' );
 
@@ -38,6 +39,11 @@ define( function( require ) {
       jawsOpening: false,
       mouthOpenAmount: 1
     };
+
+    var houseNode = new HouseNode();
+    houseNode.x = 800;
+    houseNode.bottom = ground.top;
+    this.addChild( houseNode );
 
     var peopleLayer = new Node();
     this.addChild( peopleLayer );
