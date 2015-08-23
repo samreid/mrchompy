@@ -17,6 +17,7 @@ define( function( require ) {
   var PersonNode = require( 'MRCHOMPY/mrchompy/view/PersonNode' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Util = require( 'DOT/Util' );
+  var Line = require( 'SCENERY/nodes/Line' );
 
   /**
    * @param {MrchompyModel} mrchompyModel
@@ -118,23 +119,26 @@ define( function( require ) {
         if ( !person.dead ) {
           person.x += person.vx * dt;
         }
-        if ( person.x <= monsterModel.x + 500 && !person.scared ) {
-          person.vx = Math.abs( person.vx );
-          person.scared = true;
-          person.vx = 320;
-        }
-        if ( person.x >= monsterModel.x + 1000 && person.scared ) {
-          person.scared = false;
-          person.vx = 0;
-        }
-        if ( person.dead && !person.finishedFalling ) {
-          person.angle = person.angle + Math.PI * 2 * dt;
-          if ( person.angle > Math.PI / 2 ) {
-            person.angle = Math.PI / 2;
-            person.falling = false;
-            person.finishedFalling = true;
+        if ( !person.spear ) {
+          if ( person.x <= monsterModel.x + 500 && !person.scared ) {
+            person.vx = Math.abs( person.vx );
+            person.scared = true;
+            person.vx = 320;
+          }
+          if ( person.x >= monsterModel.x + 1000 && person.scared ) {
+            person.scared = false;
+            person.vx = 0;
+          }
+          if ( person.dead && !person.finishedFalling ) {
+            person.angle = person.angle + Math.PI * 2 * dt;
+            if ( person.angle > Math.PI / 2 ) {
+              person.angle = Math.PI / 2;
+              person.falling = false;
+              person.finishedFalling = true;
+            }
           }
         }
+        if ( person.spear ) {}
       } );
       var deadCount = 0;
       for ( var i = 0; i < people.length; i++ ) {
@@ -186,11 +190,18 @@ define( function( require ) {
           rotation: people[ i ].angle
         } );
         peopleLayer.addChild( personNode );
+
+        if ( people[ i ].spear ) {
+          var spear = new Line( 0, 0, 0, 120, { lineWidth: 10, stroke: '#937b33' } );
+          peopleLayer.addChild( spear );
+          spear.left = personNode.right + 10;
+          spear.bottom = personNode.bottom;
+        }
       }
 
       if ( monsterModel.x >= 400 ) {
         worldNode.x = (-monsterModel.x + 400) * worldScale;
-        worldNode.y = Util.linear( 1, 0.5, 0, 400, worldScale );
+        worldNode.y = Util.linear( 1, 0.5, 0, 250, worldScale );
       }
     };
 
