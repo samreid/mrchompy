@@ -26,10 +26,11 @@ define( function( require ) {
   function MrchompyScreenView( mrchompyModel ) {
 
     ScreenView.call( this );
+    var lastDeadCount = 0;
 
     var worldNode = new Node();
     this.addChild( worldNode );
-    var ground = new Rectangle( -1000, 600, 20000, 1000, { fill: '#092e0d' } );
+    var ground = new Rectangle( -1000, 600, 80000, 1000, { fill: '#092e0d' } );
     worldNode.addChild( ground );
 
     var floorY = 400;
@@ -50,7 +51,7 @@ define( function( require ) {
     worldNode.addChild( new HouseNode( { x: 800, bottom: ground.top } ) );
     worldNode.addChild( new HouseNode( { x: 1600, bottom: ground.top } ) );
     worldNode.addChild( new HouseNode( { x: 2400, bottom: ground.top } ) );
-    worldNode.addChild( new HouseNode( { x: 3200, bottom: ground.top } ) );
+    worldNode.addChild( new HouseNode( { x: 4000, bottom: ground.top } ) );
 
     var peopleLayer = new Node();
     worldNode.addChild( peopleLayer );
@@ -171,6 +172,12 @@ define( function( require ) {
         people.push( newPerson( monsterModel.x + 3600, createSpear() ) );
         people.push( newPerson( monsterModel.x + 3800, createSpear() ) );
       }
+      if ( deadCount !== lastDeadCount && deadCount >= 5 ) {
+        people.splice( 0, 1 );
+        people.push( newPerson( monsterModel.x + 3800, Math.random() < 0.5 ? createSpear() : null ) );
+        people.push( newPerson( monsterModel.x + 3800, Math.random() < 0.5 ? createSpear() : null ) );
+      }
+      lastDeadCount = deadCount;
       if ( zoomingOut ) {
         worldScale = worldScale - 1.2 * dt;
         if ( worldScale <= 0.5 ) {
