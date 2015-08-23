@@ -26,28 +26,48 @@ define( function( require ) {
     this.addChild( ground );
 
     var monsterNode = new MonsterNode();
-    monsterNode.x = 200;
+
     monsterNode.bottom = ground.top;
     this.addChild( monsterNode );
 
-    this.step = function() {
+    var floorY = 400;
+    var monsterModel = {
+      x: 200,
+      jumping: false,
+      vy: 0,
+      gravity: 5000,
+      y: floorY
+    };
+
+    this.step = function( dt ) {
 
       if ( pressedKeys[ 39 ] ) {
 
         // right
         console.log( 'right' );
+        monsterModel.x += 10;
       }
       if ( pressedKeys[ 37 ] ) {
         console.log( 'left' );
+        monsterModel.x -= 10;
       }
-      if ( pressedKeys[ 38 ] ) {
-        console.log( 'up' );
+      if ( pressedKeys[ 38 ] && !monsterModel.jumping ) {
+        monsterModel.jumping = true;
+        monsterModel.vy = -1000;
       }
+
+      monsterModel.vy = monsterModel.vy + monsterModel.gravity * dt;
+      monsterModel.y = monsterModel.y + monsterModel.vy * dt;
+      if ( monsterModel.y >= floorY ) {
+        monsterModel.y = floorY;
+        monsterModel.jumping = false;
+      }
+
       this.removeChild( monsterNode );
 
       monsterNode = new MonsterNode();
-      monsterNode.x = 200;
-      monsterNode.bottom = ground.top;
+      monsterNode.x = monsterModel.x;
+      monsterNode.y = monsterModel.y;
       this.addChild( monsterNode );
     };
 
