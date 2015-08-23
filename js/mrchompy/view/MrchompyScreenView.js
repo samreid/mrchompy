@@ -174,8 +174,10 @@ define( function( require ) {
       }
       if ( deadCount !== lastDeadCount && deadCount >= 5 ) {
         people.splice( 0, 1 );
-        people.push( newPerson( monsterModel.x + 3800, Math.random() < 0.5 ? createSpear() : null ) );
-        people.push( newPerson( monsterModel.x + 3800, Math.random() < 0.5 ? createSpear() : null ) );
+        if ( people.length < 20 ) {
+          people.push( newPerson( monsterModel.x + 3800, Math.random() < 0.5 ? createSpear() : null ) );
+          people.push( newPerson( monsterModel.x + 3800, Math.random() < 0.5 ? createSpear() : null ) );
+        }
       }
       lastDeadCount = deadCount;
       if ( zoomingOut ) {
