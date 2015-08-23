@@ -13,6 +13,8 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var MonsterNode = require( 'MRCHOMPY/mrchompy/view/MonsterNode' );
+  var PersonNode = require( 'MRCHOMPY/mrchompy/view/PersonNode' );
+  var Node = require( 'SCENERY/nodes/Node' );
 
   /**
    * @param {MrchompyModel} mrchompyModel
@@ -37,8 +39,15 @@ define( function( require ) {
       mouthOpenAmount: 1
     };
 
+    var peopleLayer = new Node();
+    this.addChild( peopleLayer );
     var monsterNode = new MonsterNode( monsterModel );
     this.addChild( monsterNode );
+
+    var people = [ {
+      x: 600,
+      y: 450
+    } ];
 
     this.step = function( dt ) {
 
@@ -88,6 +97,12 @@ define( function( require ) {
       monsterNode.x = monsterModel.x;
       monsterNode.y = monsterModel.y;
       this.addChild( monsterNode );
+
+      peopleLayer.removeAllChildren();
+      for ( var i = 0; i < people.length; i++ ) {
+        var personNode = new PersonNode( people[ i ] );
+        peopleLayer.addChild( personNode );
+      }
     };
 
     // Key listeners 

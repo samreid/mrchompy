@@ -35,7 +35,6 @@ define( function( require ) {
       var mouthOpenAmount = monsterModel.mouthOpenAmount;
       var alpha1 = Util.linear( 0, 1, minAlpha1, maxAlpha1, mouthOpenAmount );
       var alpha2 = Util.linear( 0, 1, minAlpha2, maxAlpha2, mouthOpenAmount );
-      console.log( alpha1, alpha2 );
       // Linearly interpolate two points and evaluate the line equation for a third point
       // f( a1 ) = b1, f( a2 ) = b2, f( a3 ) = <linear mapped value>
       //linear: function( a1, a2, b1, b2, a3 ) {
