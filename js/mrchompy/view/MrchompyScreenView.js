@@ -16,6 +16,7 @@ define( function( require ) {
   var HouseNode = require( 'MRCHOMPY/mrchompy/view/HouseNode' );
   var PersonNode = require( 'MRCHOMPY/mrchompy/view/PersonNode' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Util = require( 'DOT/Util' );
 
   /**
    * @param {MrchompyModel} mrchompyModel
@@ -42,6 +43,9 @@ define( function( require ) {
       mouthOpenAmount: 1
     };
 
+    var addedSpears = false;
+    var zoomingOut = false;
+
     worldNode.addChild( new HouseNode( { x: 800, bottom: ground.top } ) );
     worldNode.addChild( new HouseNode( { x: 1600, bottom: ground.top } ) );
     worldNode.addChild( new HouseNode( { x: 2400, bottom: ground.top } ) );
@@ -52,7 +56,7 @@ define( function( require ) {
     var monsterNode = new MonsterNode( monsterModel );
     worldNode.addChild( monsterNode );
 
-    var newPerson = function( x ) {
+    var newPerson = function( x, spear ) {
       return {
         x: x,
         y: 450,
@@ -61,12 +65,15 @@ define( function( require ) {
         scared: false,
         angle: 0,
         falling: false,
-        finishedFalling: false
+        finishedFalling: false,
+        spear: spear
       };
     };
+
+    var worldScale = 1;
     var people = [];
     for ( var i = 0; i < 4; i++ ) {
-      people.push( newPerson( i * 800 + 1500 ) );
+      people.push( newPerson( i * 800 + 1500, false ) );
     }
 
     this.step = function( dt ) {
@@ -129,6 +136,29 @@ define( function( require ) {
           }
         }
       } );
+      var deadCount = 0;
+      for ( var i = 0; i < people.length; i++ ) {
+        var person = people[ i ];
+        if ( person.dead ) {
+          deadCount++;
+        }
+      }
+      if ( deadCount === 4 && !addedSpears ) {
+        addedSpears = true;
+        zoomingOut = true;
+        people.push( newPerson( monsterModel.x + 3000, true ) );
+        people.push( newPerson( monsterModel.x + 3400, true ) );
+        people.push( newPerson( monsterModel.x + 3600, true ) );
+        people.push( newPerson( monsterModel.x + 3800, true ) );
+      }
+      if ( zoomingOut ) {
+        worldScale = worldScale - 1.2 * dt;
+        if ( worldScale <= 0.5 ) {
+          zoomingOut = false;
+          worldScale = 0.5;
+        }
+        worldNode.setScaleMagnitude( worldScale );
+      }
 
       monsterModel.vy = monsterModel.vy + monsterModel.gravity * dt;
       monsterModel.y = monsterModel.y + monsterModel.vy * dt;
@@ -159,7 +189,8 @@ define( function( require ) {
       }
 
       if ( monsterModel.x >= 400 ) {
-        worldNode.x = -monsterModel.x + 400;
+        worldNode.x = (-monsterModel.x + 400) * worldScale;
+        worldNode.y = Util.linear( 1, 0.5, 0, 400, worldScale );
       }
     };
 
